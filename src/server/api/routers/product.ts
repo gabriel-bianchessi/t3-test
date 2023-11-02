@@ -11,10 +11,7 @@ const idValidation = (props: {
   required_error: props.required_error ?? "ID is required for this operation"
 })
 
-const createLanguageSchema = z.object({
-  languageId: idValidation({
-    required_error: "Language ID is required"
-  }),
+const createProductSchema = z.object({
   name: z.string({
     required_error: "Name is required",
     invalid_type_error: "Name needs to be a string"
@@ -33,18 +30,7 @@ const createLanguageSchema = z.object({
   })
 })
 
-const creationSchema = z.array(createLanguageSchema).superRefine((i, context) => {
-  if (i.length === 0) {
-    context.addIssue({
-      code: "too_small",
-      inclusive: true,
-      minimum: 1,
-      type: "array"
-    });
-  }
-});
-
-export const Productrouter = createTRPCRouter({
+export const productRouter = createTRPCRouter({
   getById: publicProcedure
     .input(z.object({
       id: idValidation({})
@@ -97,33 +83,28 @@ export const Productrouter = createTRPCRouter({
       })
     }),
   create: publicProcedure
-    .input(creationSchema)
+    .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
-      const productId = await ctx.db.language.create({
-        data: input[0]!,
-        select: {
-          id: true
+      return await ctx.db.product.create({
+        data: {
+          description: input.description,
+          name: input.name,
+          price: input.price,
+          subtitle: input.subtitle
         }
       })
-
-      for (const {
-        description,
-        languageId,
-        name,
-        price,
-        subtitle
-      } of input) {
-        await ctx.db.productHasLanguage.create({
-          data: {
-            description,
-            name,
-            price,
-            subtitle,
-            languageId,
-            productId: productId.id
-          }
-        })
-      }
+    }),
+  update: publicProcedure
+    .input(createProductSchema.partial().extend({id: idValidation({})}))
+    .mutation(async ({ctx, input}) => {
+      return await ctx.db.product.update({
+        where: {
+          id: input.id
+        },
+        data: {
+          ...input
+        }
+      })
     }),
   delete: publicProcedure
     .input(z.object({

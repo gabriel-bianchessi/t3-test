@@ -49,4 +49,5 @@ model ProductHasLanguage {
     price       Float
 
     @@unique([productId, languageId])
+    @@index([languageId])
 }
