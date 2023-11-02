@@ -1,7 +1,7 @@
 "use client"
 
 import { api } from "~/trpc/react"
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai"
+import { AiOutlineEdit, AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai"
 import Link from "next/link"
 import toast from "react-hot-toast"
 
@@ -27,7 +27,16 @@ export default function AdminLanguagesPage() {
   return (
     <main className="min-h-[calc(100vh-80px)] w-full flex items-center justify-center">
       <div className="p-8 bg-zinc-100 rounded-2xl shadow-sm flex flex-col gap-3 min-w-[320px]">
-        <h1 className="text-xl font-bold">Linguagens</h1>
+        <div className="flex items-center justify-between w-full">
+          <h1 className="text-xl font-bold">Linguagens</h1>
+          <Link 
+            href="/admin/languages/create" 
+            className="h-6 w-6 bg-green-500 flex items-center justify-center rounded-full"
+            title="Adicionar linguagem"
+          >
+            <AiOutlinePlusCircle size="1rem" color="white" />
+          </Link>
+        </div>
 
         {languages?.length === 0 && (
           <div>

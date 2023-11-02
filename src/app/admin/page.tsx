@@ -2,13 +2,13 @@ import Link from "next/link";
 
 const routesInAdmin = [
   {
-    name: "Posts",
-    path: "/admin/posts",
-  },
-  {
     name: "Linguagens",
     path: "/admin/languages",
   },
+  {
+    name: "Produtos",
+    path: "/admin/products",
+  }
 ];
 
 
