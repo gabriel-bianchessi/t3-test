@@ -88,6 +88,7 @@ const CreateProduct: React.FC = () => {
           <label>Preço</label>
           <input
             type="number" {...register("price")}
+            step="0.01"
             className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-100"
           />
           <span className="text-red-500 text-xs">{formMethods.formState.errors.price?.message}</span>

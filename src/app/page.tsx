@@ -1,38 +1,44 @@
+"use client"
 import Link from "next/link";
+import { api } from "~/trpc/react";
 
 export default function Home() {
+  const { data: products, isLoading: isLoadingProducts } = api.product.getAll.useQuery()
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
+    <main className="flex flex-col pt-8 gap-8 ">
+      <h1 className="text-3xl font-bold">Produtos</h1>
+
+      {isLoadingProducts && (
+        <div>
+          <p>Carregando...</p>
         </div>
-      </div>
+      )}
+
+      {products?.length === 0 && (
+        <div>
+          <p>Nenhum produto cadastrado.</p>
+        </div>
+      )}
+
+
+      {products && products?.length > 0 && (
+        <div className="grid grid-cols-4 w-full gap-4">
+          {products.map(product => (
+            <Link href={`/products/${product.id}`} key={product.id} className="bg-zinc-100 p-4 rounded-lg shadow-sm hover:bg-zinc-200 transition-colors duration-100">
+              <div className="flex flex-col justify-center gap-2">
+              
+                <h3 className="font-bold">{product.name}</h3>
+                {product.subtitle && (
+                  <p className="text-sm text-zinc-500">{product.subtitle}</p>
+                )}
+                <p className="text-zinc-700 flex-wrap flex max-w-md">{product.description}</p>
+                <p>R$ {product.price.toFixed(2)}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </main>
   );
 }

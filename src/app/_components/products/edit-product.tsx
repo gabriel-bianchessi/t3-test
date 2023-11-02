@@ -75,7 +75,7 @@ const EditProduct: React.FC<{id: number}> = ({ id }) => {
           <label>Subtítulo</label>
           <input
             type="text" {...register("subtitle")}
-            defaultValue={product?.subtitle ?? ""}
+            defaultValue={product?.subtitle ?? " "}
             disabled={isPosting || isLoadingDefault}
             className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-100"
           />
@@ -94,7 +94,9 @@ const EditProduct: React.FC<{id: number}> = ({ id }) => {
         <div className="flex flex-col gap-2">
           <label>Preço</label>
           <input
-            type="number" {...register("price")}
+            {...register("price")}
+            type="number" 
+            step="0.01"
             defaultValue={product?.price}
             disabled={isPosting || isLoadingDefault}
             className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-100"
@@ -117,7 +119,7 @@ const EditProduct: React.FC<{id: number}> = ({ id }) => {
           className="flex-1 bg-green-500 text-white rounded-lg p-2 hover:bg-green-600 transition-colors duration-100 focus:outline-none focus:ring-2 focus:ring-green-500"
           disabled={isPosting || isLoadingDefault}
         >
-          {isPosting ? "Carregando..." : "Criar"}
+          {isPosting ? "Carregando..." : "Alterar"}
         </button>
       </div>
     </form>
