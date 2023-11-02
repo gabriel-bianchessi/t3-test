@@ -32,13 +32,13 @@ const getByIdAndDeleteValidation = z.object({
 })
 
 export const languageRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.language.findMany()
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.language.findMany()
   }),
   getById: publicProcedure
     .input(getByIdAndDeleteValidation)
-    .query(({ctx, input}) => {
-      return ctx.db.language.findUniqueOrThrow({
+    .query(async ({ctx, input}) => {
+      return await ctx.db.language.findUniqueOrThrow({
         where: {
           id: input.id
         }
@@ -47,7 +47,7 @@ export const languageRouter = createTRPCRouter({
   create: publicProcedure
     .input(createValidation)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.language.create({
+      return await ctx.db.language.create({
         data: {
           name: input.name
         }
@@ -56,7 +56,7 @@ export const languageRouter = createTRPCRouter({
   update: publicProcedure
     .input(updateValidation)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.language.update({
+      return await ctx.db.language.update({
         where: {
           id: input.id
         },
@@ -68,7 +68,7 @@ export const languageRouter = createTRPCRouter({
   delete: publicProcedure
     .input(getByIdAndDeleteValidation)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.language.delete({
+      return await ctx.db.language.delete({
         where: {
           id: input.id
         }

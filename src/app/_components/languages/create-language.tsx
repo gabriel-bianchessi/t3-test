@@ -36,12 +36,12 @@ const CreateLanguage: React.FC = () => {
     },
     async onSettled() {
       await ctx.language.getAll.invalidate()
+      router.push("/admin/languages")
     }
   })
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     mutate(data)
-    router.push("/admin/languages")
   }
 
   return <FormProvider {...formMethods}>
